@@ -40,6 +40,10 @@ require 'cek.php';
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Barang Keluar
                             </a>
+                            <a class="nav-link" href="admin.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Kelola Admin
+                            </a>
                             <a class="nav-link" href="logout.php">
                                Logout
                             </a>
@@ -57,6 +61,7 @@ require 'cek.php';
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"> 
                                     Tambah Barang Keluar
                                 </button> 
+                                <a href="exportkeluar.php" class="btn btn-info"> Export Data Keluar </a>
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
