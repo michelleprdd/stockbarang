@@ -40,6 +40,10 @@ require 'cek.php';
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Barang Keluar
                             </a>
+                            <a class="nav-link" href="admin.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Kelola Admin
+                            </a>
                             <a class="nav-link" href="logout.php">
                                Logout
                             </a>
@@ -57,10 +61,29 @@ require 'cek.php';
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"> 
                                     Tambah Barang
                                 </button>
+                                <a href="export.php" class="btn btn-info"> Export Data </a>
                             </div>
                             <div class="card-body">
-                                <table id="datatablesSimple">
-                                    <thead>
+
+                            <?php
+                              $ambildatastok =mysqli_query($conn, "select * from stock where stock < 1");
+
+                              while($fetch=mysqli_fetch_array($ambildatastok)){
+                                $barang = $fetch['namabarang'];
+                            
+                            ?>
+                            <div class="alert alert-danger alert-dismissible fade show">  
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Perhatian!</strong> Stok <?=$barang;?> Telah Habis 
+                            </div>
+
+                            <?php 
+                                }
+                            ?>
+
+                              <div class="table-responsive">
+                                <table class="table table-bordered" id="mauexport" width="100%" cellspacing="0"> 
+                                  <thead>
                                         <tr>
                                             <th>No</th>
                                             <th>Nama Barang</th>
@@ -70,7 +93,7 @@ require 'cek.php';
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+
                                           <?php
                                           $ambilsemuadatastock = mysqli_query($conn,"select * from stock");
                                           $i = 1;
@@ -86,7 +109,7 @@ require 'cek.php';
                                             <td><?=$namabarang;?></td>
                                             <td><?=$deskripsi;?></td>
                                             <td><?=$stock;?></td>
-                                      n     <td> 
+                                          <td> 
                                               <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit<?=$idb;?>"> Edit </button>
                                               <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete<?=$idb;?>"> Delete </button>
                                             </td>
