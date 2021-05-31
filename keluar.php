@@ -15,6 +15,15 @@ require 'cek.php';
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+        <style>
+          .zoomable{
+            width: 100px;
+          }
+          .zoomable:hover{
+             transform: scale(2,5);
+             transition: 0,3s ease;
+          }
+        </style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -40,6 +49,10 @@ require 'cek.php';
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Barang Keluar
                             </a>
+                            <a class="nav-link" href="admin.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Kelola Admin
+                            </a>
                             <a class="nav-link" href="logout.php">
                                Logout
                             </a>
@@ -57,12 +70,14 @@ require 'cek.php';
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"> 
                                     Tambah Barang Keluar
                                 </button> 
+                                <a href="exportkeluar.php" class="btn btn-info"> Export Data Keluar </a>
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
                                             <th>Tanggal</th>
+                                            <th>Gambar</th>
                                             <th>Nama Barang</th>
                                             <th>Jumlah</th>
                                             <th>Penerima</th>
@@ -80,10 +95,21 @@ require 'cek.php';
                                             $namabarang = $data['namabarang'];
                                             $qty = $data['qty'];
                                             $penerima = $data['penerima'];
+
+                                             //cek ada gambar atau tidak
+                                             $gambar = $data['image']; //ambil gambar
+                                             if($gambar==null){
+                                               //jika tidak ada gambar
+                                               $img = 'No Photo';
+                                             } else{
+                                               //jika ada gambar
+                                               $img = '<img src="images/'.$gambar.'" class="zoomable">';
+                                             }
                                         ?>
                                         
                                         <tr>
                                             <td><?=$tanggal;?></td>
+                                            <td><?=$img;?></td>
                                             <td><?=$namabarang;?></td>
                                             <td><?=$qty;?></td>
                                             <td><?=$penerima;?></td>
