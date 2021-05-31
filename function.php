@@ -10,8 +10,8 @@ if(isset($_POST['addnewbarang'])){
 	$stock = $_POST['stock'];
 
 	//soal gambar
-	$allowed_extension = array("png","jpg")
-	$nama = $FILES["file"]["name"]; //ngambil nama gambar 
+	$allowed_extension = array("png","jpg");
+	$nama = $FILES['file']['name']; //ngambil nama gambar 
 	$dot = explode('.',$nama);
 	$ekstensi = strtolower(end($dot)); //ngambil ekstensinya
 	$ukuran = $_FILES['file']['size']; //ngambil size filenya
@@ -81,8 +81,8 @@ if(isset($_POST['updatebarang'])){
 	$deskripsi = $_POST['deskripsi'];
 	
 	//soal gambar
-	$allowed_extension = array("png","jpg")
-	$nama = $FILES["file"]["name"]; //ngambil nama gambar 
+	$allowed_extension = array("png","jpg");
+	$nama = $FILES['file']['name']; //ngambil nama gambar 
 	$dot = explode('.',$nama);
 	$ekstensi = strtolower(end($dot)); //ngambil ekstensinya
 	$ukuran = $_FILES['file']['size']; //ngambil size filenya
