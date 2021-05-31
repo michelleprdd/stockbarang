@@ -15,6 +15,20 @@ require 'cek.php';
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+        <style>
+          .zoomable{
+            width: 100px;
+          }
+          .zoomable:hover{
+             transform: scale(2,5);
+             transition: 0,3s ease;
+          }
+
+          a{
+            text-decoration:none;
+          }
+        </style>
+    
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -40,6 +54,10 @@ require 'cek.php';
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Barang Keluar
                             </a>
+                            <a class="nav-link" href="admin.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Kelola Admin
+                            </a>
                             <a class="nav-link" href="logout.php">
                                Logout
                             </a>
@@ -57,12 +75,32 @@ require 'cek.php';
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"> 
                                     Tambah Barang
                                 </button>
+                                <a href="export.php" class="btn btn-info"> Export Data </a>
                             </div>
                             <div class="card-body">
-                                <table id="datatablesSimple">
-                                    <thead>
+
+                            <?php
+                              $ambildatastok =mysqli_query($conn, "select * from stock where stock < 1");
+
+                              while($fetch=mysqli_fetch_array($ambildatastok)){
+                                $barang = $fetch['namabarang'];
+                            
+                            ?>
+                            <div class="alert alert-danger alert-dismissible fade show">  
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Perhatian!</strong> Stok <?=$barang;?> Telah Habis 
+                            </div>
+
+                            <?php 
+                                }
+                            ?>
+
+                              <div class="table-responsive">
+                                <table class="table table-bordered" id="mauexport" width="100%" cellspacing="0"> 
+                                  <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>Gambar</th>
                                             <th>Nama Barang</th>
                                             <th>Deskripsi</th>
                                             <th>Stock</th>
@@ -70,7 +108,7 @@ require 'cek.php';
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+
                                           <?php
                                           $ambilsemuadatastock = mysqli_query($conn,"select * from stock");
                                           $i = 1;
@@ -79,14 +117,25 @@ require 'cek.php';
                                             $deskripsi = $data['deskripsi'];
                                             $stock = $data['stock'];
                                             $idb   = $data['idbarang'];
+
+                                            //cek ada gambar atau tidak
+                                            $gambar = $data['image']; //ambil gambar
+                                            if($gambar==null){
+                                              //jika tidak ada gambar
+                                              $img = 'No Photo';
+                                            } else{
+                                              //jika ada gambar
+                                              $img = '<img src="images/'.$gambar.'" class="zoomable">';
+                                            }
                                         ?>
                                         
                                         <tr>
                                             <td><?=$i++;?></td>
-                                            <td><?=$namabarang;?></td>
+                                            <td><?=$img;?></td>
+                                            <td><strong><a href="detail.php?id=<?=$idb;?>"><?=$namabarang;?></strong></td>
                                             <td><?=$deskripsi;?></td>
                                             <td><?=$stock;?></td>
-                                      n     <td> 
+                                          <td> 
                                               <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit<?=$idb;?>"> Edit </button>
                                               <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete<?=$idb;?>"> Delete </button>
                                             </td>
@@ -103,12 +152,17 @@ require 'cek.php';
                                                 </div>
 
                                                 <!-- Modal body -->
-                                                <form method="post">
+                                                <form method="post" enctype="multipart/form-data">
                                                 <div class="modal-body">
                                                   <input type="text" name="namabarang" value="<?=$namabarang;?>" placeholder="Nama Barang" class="form-control" required>
                                                   <br>
                                                   <input type="text" name="deskripsi" value= "<?=$deskripsi;?>" placeholder="Deskripsi Barang" class="form-control" required>
                                                   <input type="hidden" name="idb" value="<?=$idb;?>">
+                                                  <br>
+                                                  <input type="file" name="file" class="form-control">
+                                                  <br>
+                                                  <input type="file" name="file" class="form-control">
+                                                  <br>
                                                   <button type="submit" class="btn btn-primary" name="updatebarang">Submit</button>
                                                 </div>
                                                 </form>
