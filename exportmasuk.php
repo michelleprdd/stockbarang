@@ -18,7 +18,7 @@ require 'cek.php';
 
 <body>
 <div class="container">
-			<h2>Laporan Barang Keluar </h2>
+			<h2>Laporan Barang Masuk</h2>
 			<h4>(Inventory)</h4>
             <br>
 				<div class="data-tables datatable-dark">
@@ -27,6 +27,7 @@ require 'cek.php';
                     <table class="table table-bordered" id="mauexport" width="100%" cellspacing="0"> 
                                   <thead>
                                         <tr>
+                                            <th>Id Masuk</th>
                                             <th>Tanggal</th>
                                             <th>Nama Barang</th>
                                             <th>Jumlah</th>
@@ -46,6 +47,7 @@ require 'cek.php';
                                             $keterangan = $data['keterangan'];
                                         ?>
                                          <tr>
+                                            <td><?php echo $idm;?></td>
                                             <td><?php echo $tanggal;?></td>
                                             <td><?php echo $namabarang;?></td>
                                             <td><?php echo $qty;?></td>
