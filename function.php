@@ -9,6 +9,17 @@ if(isset($_POST['addnewbarang'])){
 	$deskripsi = $_POST['deskripsi'];
 	$stock = $_POST['stock'];
 
+	//soal gambar
+	$allowed_extension = array("png","jpg");
+	$nama = $FILES['file']['name']; //ngambil nama gambar 
+	$dot = explode('.',$nama);
+	$ekstensi = strtolower(end($dot)); //ngambil ekstensinya
+	$ukuran = $_FILES['file']['size']; //ngambil size filenya
+	$file_tmp = $FILES['file']['tmp_name']; //ngambil lokasi filenya
+
+	//penamaan file -> enkripsi
+	$image = md5(uniqid($nama,true) . time()).'.'.$ekstensi; //menggabungkan nama file yang dienkripsi dgn ekstensinya
+
 	$addtotable = mysqli_query($conn,"insert into stock (namabarang, deskripsi, stock) values('$namabarang','$deskripsi','$stock')");
 	if($addtotable){
 		header('location:index.php');
@@ -68,14 +79,38 @@ if(isset($_POST['updatebarang'])){
 	$idb = $_POST['idb'];
 	$namabarang = $_POST['namabarang'];
 	$deskripsi = $_POST['deskripsi'];
+	
+	//soal gambar
+	$allowed_extension = array("png","jpg");
+	$nama = $FILES['file']['name']; //ngambil nama gambar 
+	$dot = explode('.',$nama);
+	$ekstensi = strtolower(end($dot)); //ngambil ekstensinya
+	$ukuran = $_FILES['file']['size']; //ngambil size filenya
+	$file_tmp = $FILES['file']['tmp_name']; //ngambil lokasi filenya
 
-	$update = mysqli_query($conn, "update stock set namabarang='$namabarang' , deskripsi='$deskripsi' where idbarang='$idb' ");
-	if($update) {
-		header('location:index.php');
-	} else{
-	    echo 'Gagal';
-	    header('location:index.php');
+	//penamaan file -> enkripsi
+	$image = md5(uniqid($nama,true) . time()).'.'.$ekstensi; //menggabungkan nama file yang dienkripsi dgn ekstensinya
+
+	if(ukuran==0){
+		//jika tidak ingin upload
+		$update = mysqli_query($conn, "update stock set namabarang='$namabarang' , deskripsi='$deskripsi' where idbarang='$idb' ");
+		if($update) {
+			header('location:index.php');
+	}	 else{
+	    	echo 'Gagal';
+	    	header('location:index.php');
     }
+	} else {
+		//jika ingin
+		move_uploaded_file($file_tmp, 'images/'.$image);
+		$update = mysqli_query($conn, "update stock set namabarang='$namabarang' , deskripsi='$deskripsi' , image='$image' where idbarang='$idb' ");
+		if($update) {
+			header('location:index.php');
+		} else{
+	    	echo 'Gagal';
+	    	header('location:index.php');
+   		 }
+	}
 
 }
 
@@ -83,7 +118,13 @@ if(isset($_POST['updatebarang'])){
 //delete barang dari stock 
 
 if(isset($_POST['hapusbarang'])){
-	$idb = $_POST['idb'];
+	$idb = $_POST['idb']; //idbarang
+
+	$gambar = mysqli_query($conn,"select * from stock where idbarang='$idb'");
+	$get = mysqli_fetch_array($gambar);
+	$img = 'images/' .$get['image'];
+	unlink($img);
+
 	$hapus = mysqli_query($conn, "delete from stock where idbarang='$idb'");
 	if($hapus) {
 		header('location:index.php');

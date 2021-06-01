@@ -15,6 +15,20 @@ require 'cek.php';
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+        <style>
+          .zoomable{
+            width: 100px;
+          }
+          .zoomable:hover{
+             transform: scale(2,5);
+             transition: 0,3s ease;
+          }
+
+          a{
+            text-decoration:none;
+          }
+        </style>
+    
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -86,6 +100,7 @@ require 'cek.php';
                                   <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>Gambar</th>
                                             <th>Nama Barang</th>
                                             <th>Deskripsi</th>
                                             <th>Stock</th>
@@ -102,11 +117,22 @@ require 'cek.php';
                                             $deskripsi = $data['deskripsi'];
                                             $stock = $data['stock'];
                                             $idb   = $data['idbarang'];
+
+                                            //cek ada gambar atau tidak
+                                            $gambar = $data['image']; //ambil gambar
+                                            if($gambar==null){
+                                              //jika tidak ada gambar
+                                              $img = 'No Photo';
+                                            } else{
+                                              //jika ada gambar
+                                              $img = '<img src="images/'.$gambar.'" class="zoomable">';
+                                            }
                                         ?>
                                         
                                         <tr>
                                             <td><?=$i++;?></td>
-                                            <td><?=$namabarang;?></td>
+                                            <td><?=$img;?></td>
+                                            <td><strong><a href="detail.php?id=<?=$idb;?>"><?=$namabarang;?></strong></td>
                                             <td><?=$deskripsi;?></td>
                                             <td><?=$stock;?></td>
                                           <td> 
@@ -126,12 +152,17 @@ require 'cek.php';
                                                 </div>
 
                                                 <!-- Modal body -->
-                                                <form method="post">
+                                                <form method="post" enctype="multipart/form-data">
                                                 <div class="modal-body">
                                                   <input type="text" name="namabarang" value="<?=$namabarang;?>" placeholder="Nama Barang" class="form-control" required>
                                                   <br>
                                                   <input type="text" name="deskripsi" value= "<?=$deskripsi;?>" placeholder="Deskripsi Barang" class="form-control" required>
                                                   <input type="hidden" name="idb" value="<?=$idb;?>">
+                                                  <br>
+                                                  <input type="file" name="file" class="form-control">
+                                                  <br>
+                                                  <input type="file" name="file" class="form-control">
+                                                  <br>
                                                   <button type="submit" class="btn btn-primary" name="updatebarang">Submit</button>
                                                 </div>
                                                 </form>
