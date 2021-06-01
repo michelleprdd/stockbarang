@@ -26,10 +26,12 @@ require 'cek.php';
                     <table class="table table-bordered" id="mauexport" width="100%" cellspacing="0"> 
                                   <thead>
                                         <tr>
+                                            <th>Id Keluar</th>
                                             <th>Tanggal</th>
                                             <th>Nama Barang</th>
                                             <th>Jumlah</th>
                                             <th>Penerima</th>
+                                           
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -38,9 +40,8 @@ require 'cek.php';
                                           $ambilsemuadatastock = mysqli_query($conn,"select * from keluar k, stock s where s.idbarang = k.idbarang");
                                           while($data=mysqli_fetch_array($ambilsemuadatastock)){
                                             $idk = $data['idkeluar'];
-                                            $idb = $data['idbarang'];
                                             $tanggal = $data['tanggal'];
-                                            $namabarang = $data['namabarang'];
+                                            $namabarang = $data['namabarang']; 
                                             $qty = $data['qty'];
                                             $penerima = $data['penerima'];
                                           
@@ -48,8 +49,6 @@ require 'cek.php';
                                         
                                         <tr>
                                             <td><?php echo $idk;?></td>
-                                            <td><?php echo $idb;?></td>
-                                            <td><?php echo $tanggal;?></td>
                                             <td><?php echo $tanggal;?></td>
                                             <td><?php echo $namabarang;?></td>
                                             <td><?php echo $qty;?></td>
