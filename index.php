@@ -243,13 +243,15 @@ require 'cek.php';
         </div>
         
         <!-- Modal body -->
-        <form method="post">
+        <form method="post "enctype="multipart/form-data">
         <div class="modal-body">
           <input type="text" name="namabarang" placeholder="Nama Barang" class="form-control" required>
           <br>
           <input type="text" name="deskripsi" placeholder="Deskripsi Barang" class="form-control" required>
           <br>
           <input type="number" name="stock" placeholder="Stock Barang" class="form-control" required>
+          <br>
+          <input type="file" name="file" class="form-control">
           <br>
           <button type="submit" class="btn btn-primary" name="addnewbarang">Submit</button>
         </div>
