@@ -161,8 +161,6 @@ require 'cek.php';
                                                   <br>
                                                   <input type="file" name="file" class="form-control">
                                                   <br>
-                                                  <input type="file" name="file" class="form-control">
-                                                  <br>
                                                   <button type="submit" class="btn btn-primary" name="updatebarang">Submit</button>
                                                 </div>
                                                 </form>
