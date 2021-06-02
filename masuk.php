@@ -146,8 +146,9 @@ require 'cek.php';
 
                                               </div>
                                             </div>
+                                          </div>
 
-                                                     <!-- Delete Modal -->
+                                              <!-- Delete Modal -->
                                           <div class="modal fade" id="delete<?=$idm;?>">
                                             <div class="modal-dialog">
                                               <div class="modal-content">
@@ -172,6 +173,9 @@ require 'cek.php';
                                              </div>
                                             </div>
                                         </div>
+                                                     
+
+
 
                                         
                                         <?php
