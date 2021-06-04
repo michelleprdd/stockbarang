@@ -18,7 +18,7 @@ require 'cek.php';
 
 <body>
 <div class="container">
-			<h2>Stock Bahan</h2>
+			<h2>Stock Barang</h2>
 			<h4>(Inventory)</h4>
 				<div class="data-tables datatable-dark">
 
