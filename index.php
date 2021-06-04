@@ -79,7 +79,7 @@ require 'cek.php';
                             </a>
                             <a class="nav-link" href="admin.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-user-cog"></i></div>
-                                
+                                Kelola Admin
                             </a>
 
                            
