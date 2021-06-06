@@ -77,6 +77,10 @@ require 'cek.php';
                                 <div class="sb-nav-link-icon"><i class="fas fa-shipping-fast"></i></div>
                                 Barang Keluar
                             </a>
+                            <a class="nav-link" href="peminjaman.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-hand-holding"></i></div>
+                                Peminjaman Barang
+                            </a>
                             <a class="nav-link" href="admin.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-user-cog"></i></div>
                                 Kelola Admin
