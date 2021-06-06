@@ -73,6 +73,10 @@ require 'cek.php';
                                 <div class="sb-nav-link-icon"><i class="fas fa-shipping-fast"></i></div>
                                 Barang Keluar
                             </a>
+                            <a class="nav-link" href="peminjaman.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-hand-holding"></i></div>
+                                Peminjaman Barang
+                            </a>
                             <a class="nav-link" href="admin.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-user-cog"></i></div>
                                 Kelola Admin
@@ -87,22 +91,36 @@ require 'cek.php';
                         <h1 class="mt-4">Barang Masuk</h1>
                         <div class="card mb-4">
                             <div class="card-header">
-                               
+                             
+
+
                              <!-- Button to Open the Modal -->
                               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                                 Tambah Barang Masuk
                               </button>
-                              <a href="exportmasuk.php" class="btn btn-info">Export Data</a>
+                              <br>
+                              <div class="row mt-4">
+                              <div class="col">
+                              <form method="post" class="form-inline">
+                                <input type="date" name="tgl_mulai" class="form-control">
+                                <input type="date" name="tgl_selesai" class="form-control ml-3">
+                                <button type="submit" name="filter_tgl" class="btn btn-info ml-3">filter</button>
+                              </form>
                             </div>
+                          </div>
+                          </div>
+
+            
                             <div class="card-body">
-                                <table id="datatablesSimple">
+                              <div class="table-responsive">
+                                <table class="table table-bordered" id="tblmasuk" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Tanggal</th>
                                             <th>Gambar</th>
                                             <th>Nama Barang</th>
                                             <th>Jumlah</th>
-                                            <th>Keterangan</th>
+                                            <th>Penerima</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -110,7 +128,27 @@ require 'cek.php';
 
 
                                         <?php
-                                        $ambilsemuadatastock = mysqli_query($conn, "select * from masuk m, stock s where s.idbarang = m.idbarang");
+                                        if(isset($_POST['filter_tgl'])){
+                                          $mulai = $_POST['tgl_mulai'];
+                                          $selesai = $_POST['tgl_selesai'];
+
+
+
+                                           if($mulai!=null || $selesai=null){
+
+                                          $ambilsemuadatastock = mysqli_query($conn, "select * from masuk m, stock s where s.idbarang = m.idbarang and tanggal BETWEEN '$mulai' and DATE_ADD('$selesai',INTERVAL 1 DAY) order by idmasuk DESC");  
+                                          }
+                                         
+                                         else { $ambilsemuadatastock = mysqli_query($conn, "select * from masuk m, stock s where s.idbarang = m.idbarang");}
+                                          // $ambilsemuadatastock = mysqli_query($conn,"select * from masuk m, stock s, login l where s.idbarang = m.idbarang and m.iduser=l.iduser and tanggal BETWEEN '$mulai' and DATE_ADD($selesai,INTERVAL 1 DAY) order by idmasuk DESC");
+
+                                        //} else {
+                                          //$ambilsemuadatastock = mysqli_query($conn,"select * from masuk m, stock s, login l where s.idbarang = m.idbarang and m.iduser=l.iduser order by idmasuk DESC");
+                                        //}
+                                     
+                                      } else {
+                                       $ambilsemuadatastock = mysqli_query($conn, "select * from masuk m, stock s where s.idbarang = m.idbarang");}
+
                                         while($data=mysqli_fetch_array($ambilsemuadatastock)){
                                             $idb = $data['idbarang'];
                                             $idm = $data['idmasuk'];
