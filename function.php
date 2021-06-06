@@ -217,7 +217,7 @@ if($qty>$qtyskrg){
 	$kurangin = $stockskrg - $selisih;
 	$kurangistocknya = mysqli_query($conn, "update stock set stock='$kurangin' where idbarang='$idb'");
 	$updatenya = mysqli_query($conn, "update masuk set qty='$qty', keterangan='$deskripsi' where idmasuk='$idm'");
-	if($kurangistocknya&&updatenya){
+	if($kurangistocknya&&$updatenya){
 		header('location:masuk.php');
 	}else {
 		echo 'Gagal';
@@ -228,7 +228,7 @@ if($qty>$qtyskrg){
 	$kurangin = $stockskrg + $selisih;
 	$kurangistocknya = mysqli_query($conn, "update stock set stock='$kurangin' where idbarang='$idb'");
 	$updatenya = mysqli_query($conn, "update masuk set qty='$qty', keterangan='$deskripsi' where idmasuk='$idm'");
-	if($kurangistocknya&&updatenya){
+	if($kurangistocknya&&$updatenya){
 		header('location:masuk.php');
 	}else {
 		echo 'Gagal';
@@ -284,7 +284,7 @@ if($qty>$qtyskrg){
 	$kurangin = $stockskrg - $selisih;
 	$kurangistocknya = mysqli_query($conn, "update stock set stock='$kurangin' where idbarang='$idb'");
 	$updatenya = mysqli_query($conn, "update keluar set qty='$qty', penerima='$penerima' where idkeluar='$idk'");
-	if($kurangistocknya&&updatenya){
+	if($kurangistocknya&&$updatenya){
 		header('location:keluar.php');
 	}else {
 		echo 'Gagal';
@@ -295,7 +295,7 @@ if($qty>$qtyskrg){
 	$kurangin = $stockskrg + $selisih;
 	$kurangistocknya = mysqli_query($conn, "update stock set stock='$kurangin' where idbarang='$idb'");
 	$updatenya = mysqli_query($conn, "update keluar set qty='$qty', penerima='$penerima' where idkeluar='$idk'");
-	if($kurangistocknya&&updatenya){
+	if($kurangistocknya&&$updatenya){
 		header('location:keluar.php');
 	}else {
 		echo 'Gagal';
@@ -372,4 +372,94 @@ if(isset($_POST['hapusadmin'])){
 	}
 	}
 
+
+//meminjam barang
+if (isset($_POST['pinjam'])) {
+	$idbarang = $_POST['barangnya']; //ambil id barang
+	$qty = $_POST['qty'];
+	$penerima = $_POST['penerima'];
+
+	//ambil stok skrg
+	$stok_saat_ini = mysqli_query($conn,"select * from stock where idbarang='$idbarang'");
+	$stok_nya = mysqli_fetch_array($stok_saat_ini);
+	$stok = $stok_nya['stock']; // ini valuenya
+
+	// kurangi stoknya
+	$new_stock = $stok-$qty;
+
+	//mulai query insert
+	$insertpinjam = mysqli_query($conn,"INSERT INTO peminjaman(idbarang,qty,peminjam) values('$idbarang','$qty','$penerima')");
+
+	//mengurangi stok ditable stok
+	$kurangistok = mysqli_query($conn,"update stock set stock='$new_stock' where idbarang='$idbarang'");
+
+	if ($insertpinjam&&$kurangistok) {
+		//jika berhasil
+		echo '
+		<script>
+		alert("Berhasil Meminjam");
+		window.location.href="peminjaman.php";
+		</script>
+		';
+		
+		} else {
+			//jika gagal
+		
+		echo '
+		<script>
+		alert("Peminjaman Gagal");
+		window.location.href="peminjaman.php";
+		</script>
+		';
+
+}
+}
+	
+//menyelesaikan pinjaman
+if (isset($_POST['barangkembali'])) {
+	$idpinjam = $_POST['idpinjam'];
+	$idbarang = $_POST['idbarang'];
+
+//eksekusi
+$update_status = mysqli_query($conn,"update peminjaman set status='Kembali' where idpeminjaman='$idpinjam'");
+
+
+//ambil stok skrg
+	$stok_saat_ini = mysqli_query($conn,"select * from stock where idbarang='$idbarang'");
+	$stok_nya = mysqli_fetch_array($stok_saat_ini);
+	$stok = $stok_nya['stock']; // ini valuenya
+
+// ambil qty
+	$stok_saat_ini1 = mysqli_query($conn,"select * from peminjaman where idpeminjaman='$idpinjam'");
+	$stok_nya1 = mysqli_fetch_array($stok_saat_ini1);
+	$stok1 = $stok_nya1['qty']; // ini valuenya
+
+//kurangin stoknya
+	$new_stock = $stok1+$stok;
+
+//kembalikan stocknya
+	$kembalikan_stock = mysqli_query($conn,"update stock set stock='$new_stock' where idbarang='$idbarang'");
+
+	if ($update_status&&$kembalikan_stock) {
+		//jika berhasil
+		echo '
+		<script>
+		alert("Barang sudah dikembalikan");
+		window.location.href="peminjaman.php";
+		</script>
+		';
+		
+		} else {
+			//jika gagal
+		
+		echo '
+		<script>
+		alert("Barang belum berhasil dikembalikan");
+		window.location.href="peminjaman.php";
+		</script>
+		';
+
+}
+
+}
 ?>

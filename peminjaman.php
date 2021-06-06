@@ -11,7 +11,7 @@ require 'cek.php';
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Barang Masuk</title>
+        <title>Peminjaman Barang</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
@@ -40,7 +40,8 @@ require 'cek.php';
             <!-- Navbar Search-->
             <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
                 <div class="input-group">
-
+                    <!-- <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button> -->
                 </div>
             </form>
             <!-- Navbar-->
@@ -73,10 +74,12 @@ require 'cek.php';
                                 <div class="sb-nav-link-icon"><i class="fas fa-shipping-fast"></i></div>
                                 Barang Keluar
                             </a>
+
                             <a class="nav-link" href="peminjaman.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-hand-holding"></i></div>
                                 Peminjaman Barang
                             </a>
+
                             <a class="nav-link" href="admin.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-user-cog"></i></div>
                                 Kelola Admin
@@ -88,15 +91,14 @@ require 'cek.php';
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Barang Masuk</h1>
+                        <h1 class="mt-4">Peminjaman Barang</h1>
+
                         <div class="card mb-4">
                             <div class="card-header">
-                             
-
-
+                               
                              <!-- Button to Open the Modal -->
                               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                                Tambah Barang Masuk
+                                Tambah Data
                               </button>
                               <br>
                               <div class="row mt-4">
@@ -110,25 +112,25 @@ require 'cek.php';
                           </div>
                           </div>
 
-            
-                            <div class="card-body">
+                             <div class="card-body">
                               <div class="table-responsive">
-                                <table class="table table-bordered" id="tblmasuk" width="100%" cellspacing="0">
+                                <table class="table table-bordered" id="tblkeluar" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Tanggal</th>
                                             <th>Gambar</th>
                                             <th>Nama Barang</th>
                                             <th>Jumlah</th>
-                                            <th>Penerima</th>
+                                            <th>Kepada</th>
+                                            <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-
+                                        
 
                                         <?php
-                                        if(isset($_POST['filter_tgl'])){
+                                         if(isset($_POST['filter_tgl'])){
                                           $mulai = $_POST['tgl_mulai'];
                                           $selesai = $_POST['tgl_selesai'];
 
@@ -136,28 +138,23 @@ require 'cek.php';
 
                                            if($mulai!=null || $selesai=null){
 
-                                          $ambilsemuadatastock = mysqli_query($conn, "select * from masuk m, stock s where s.idbarang = m.idbarang and tanggal BETWEEN '$mulai' and DATE_ADD('$selesai',INTERVAL 1 DAY) order by idmasuk DESC");  
-                                          }
+                                            $ambilsemuadatastock = mysqli_query($conn, "select * from peminjaman p, stock s where s.idbarang = p.idbarang and tanggal BETWEEN '$mulai' and DATE_ADD('$selesai',INTERVAL 1 DAY) order by idpeminjaman DESC");  
+                                            }
                                          
-                                         else { $ambilsemuadatastock = mysqli_query($conn, "select * from masuk m, stock s where s.idbarang = m.idbarang");}
-                                          // $ambilsemuadatastock = mysqli_query($conn,"select * from masuk m, stock s, login l where s.idbarang = m.idbarang and m.iduser=l.iduser and tanggal BETWEEN '$mulai' and DATE_ADD($selesai,INTERVAL 1 DAY) order by idmasuk DESC");
+                                          
+                                          else { $ambilsemuadatastock = mysqli_query($conn, "select * from peminjaman p, stock s where s.idbarang = p.idbarang");}
 
-                                        //} else {
-                                          //$ambilsemuadatastock = mysqli_query($conn,"select * from masuk m, stock s, login l where s.idbarang = m.idbarang and m.iduser=l.iduser order by idmasuk DESC");
-                                        //}
-                                     
-                                      } else {
-                                       $ambilsemuadatastock = mysqli_query($conn, "select * from masuk m, stock s where s.idbarang = m.idbarang");}
+                                          } else { $ambilsemuadatastock = mysqli_query($conn, "select * from peminjaman p, stock s where s.idbarang = p.idbarang order by idpeminjaman DESC");}
 
                                         while($data=mysqli_fetch_array($ambilsemuadatastock)){
+                                            $idk = $data['idpeminjaman'];
                                             $idb = $data['idbarang'];
-                                            $idm = $data['idmasuk'];
-                                            $tanggal = $data['tanggal'];
                                             $namabarang = $data['namabarang'];
                                             $qty = $data['qty'];
-                                            $keterangan = $data['keterangan'];
-
-
+                                            $penerima = $data['peminjam'];
+                                            $status = $data['status'];
+                                            $tanggalpinjam = $data['tanggalpinjam'];
+ 
                                             //cek ada gambar atau tidak
                                             $gambar = $data['image']; //ambil gambar
                                             if($gambar==null){
@@ -170,83 +167,60 @@ require 'cek.php';
                                         
                                         ?>
 
+                                        
                                         <tr>
-                                            <td><?=$tanggal;?></td>
+                                            <td><?=$tanggalpinjam;?></td>
                                             <td><?=$img;?></td>
                                             <td><?=$namabarang;?></td>
                                             <td><?=$qty;?></td>
-                                            <td><?=$keterangan;?></td>
+                                            <td><?=$penerima;?></td>
+                                            <td><?=$status;?></td>
                                             <td>
-                                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit<?=$idm;?>">
-                                                Edit
-                                            </button>
 
-                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete<?=$idm;?>">
-                                                Delete
-                                            </button>
+                                            <?php
+
+                                            if ($status=='Dipinjam'){
+                                              echo '<button type="button" class="btn btn-success" data-toggle="modal" data-target="#edit'.$idk.'">
+                                                Selesai
+                                            </button>';
+
+                                          } else {
+
+                                          //jika status bukan dipinjam
+                                            echo '√';
+                                          
+                                          }
+                                            ?>
+
                                             </td>
                                         </tr>
 
                                         <!-- Edit Modal -->
-                                      <div class="modal fade" id="edit<?=$idm;?>">
+                                      <div class="modal fade" id="edit<?=$idk;?>">
                                          <div class="modal-dialog">
                                           <div class="modal-content">
                                           
                                             <!-- Modal Header -->
-                                            <div class="modal-header">
-                                              <h4 class="modal-title">Edit Barang</h4>
+                                             <div class="modal-header">
+                                              <h4 class="modal-title">Selesaikan</h4>
                                               <button type="button" class="close" data-dismiss="modal">&times;</button>
                                             </div>
                                             
                                             <!-- Modal body -->
                                             <form method="post">
                                             <div class="modal-body">
+                                             Apakah barang ini sudah selesai dipinjam?
                                              <br>
-                                             <input type="text" name="keterangan" value="<?=$keterangan;?>"  class="form-control" required>
-                                            <br>
-                                            <input type="number" name="qty" value="<?=$qty;?>"  class="form-control" required>
-                                            <input type="hidden" name="idb" value="<?=$idb;?>">
-                                            <input type="hidden" name="idm" value="<?=$idm;?>">
-                                            <br>
-                                             <button type="submit" class="btn btn-primary" name="updatebarangmasuk">Submit</button>
+                                             <input type="hidden" name="idpinjam" value="<?=$idk;?>">
+                                            <input type="hidden" name="idbarang" value="<?=$idb;?>">
+                                             <button type="submit" class="btn btn-primary" name="barangkembali"> Iya </button>
                                             
                                           </div>
                                      </div>
                                       </div>
                                   </form>
                               </div>
-                                        
-
-                                    <!-- Delete Modal -->
-                                      <div class="modal fade" id="delete<?=$idm;?>">
-                                         <div class="modal-dialog">
-                                          <div class="modal-content">
-                                          
-                                            <!-- Modal Header -->
-                                            <div class="modal-header">
-                                              <h4 class="modal-title">Hapus Barang</h4>
-                                              <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            </div>
-                                            
-                                            <!-- Modal body -->
-                                            <form method="post">
-                                            <div class="modal-body">
-                                            Apakah Anda yakin ingin menghapus <?=$namabarang;?> ??
-                                            <input type="hidden" name="idb" value="<?=$idb;?>">
-                                            <input type="hidden" name="kty" value="<?=$qty;?>">
-                                            <input type="hidden" name="idm" value="<?=$idm;?>">
-                                            <br>                                            
-                                            <br>
-                                            <br>
-                                             <button type="submit" class="btn btn-danger" name="hapusbarangmasuk">Hapus</button>
-                                            
-                                            </div>
-                                            </form>
-                                            
-                                          </div>
-                                     </div>
-                                      </div>
-
+                                      
 
                                         
                                         <?php
@@ -290,7 +264,7 @@ require 'cek.php';
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Tambah Barang Masuk</h4>
+          <h4 class="modal-title">Tambah Data Peminjaman </h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
@@ -298,7 +272,7 @@ require 'cek.php';
         <form method="post">
         <div class="modal-body">
 
-         <select name="barangnya" class="form-control">
+                     <select name="barangnya" class="form-control">
              <?php
              $ambilsemuadatanya = mysqli_query($conn, "select * from stock");
              while($fetcharray = mysqli_fetch_array($ambilsemuadatanya)){
@@ -315,14 +289,17 @@ require 'cek.php';
 
          ?>    
          </select>
+
          <br>
          <input type="number" name="qty" placeholder="Quantity" class="form-control" required>
          <br>
-         <input type="text" name="penerima" placeholder="Penerima" class="form-control" required>
-        <br>
-         <button type="submit" class="btn btn-primary" name="barangmasuk">Submit</button>
+         <input type="text" name="penerima" placeholder="Kepada " class="form-control" required>
+         <br>
+         <button type="submit" class="btn btn-primary" name="pinjam">Pinjam</button>
+        
         </div>
         </form>
+        
       </div>
     </div>
   </div>
