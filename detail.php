@@ -1,4 +1,4 @@
-<?php
+ <?php
 require 'function.php';
 require 'cek.php';
 
@@ -29,7 +29,9 @@ $urlview = 'http://localhost/stokbarang/view.php?id='.$idbarang;
 $qrcode = 'https://chart.googleapis.com/chart?chs=350x350&cht=qr&chl='.$urlview.'&choe=UTF-8';
 ?>
 
-
+<!-- Generate QR -->
+$urlview = 'http://localhost/stockbarang-main/view.php?id='.$idbarang;
+$qrcode = 'http://chart.googleapis.com/chart?chs=350x350&cht=qr&chl='.$urlview.'&choe=UTF-8';
 <!DOCTYPE html>
 <html lang="en">
     <head>
