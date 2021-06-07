@@ -1,7 +1,7 @@
 <?php
 session_start();
 //membuat koneksi ke database
-$conn = mysqli_connect("localhost","root","","stokbarang");
+$conn = mysqli_connect("db","root","example","stokbarang");
 
 
 //Menambah barang baru
