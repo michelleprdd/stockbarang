@@ -147,7 +147,7 @@ $qrcode = 'https://chart.googleapis.com/chart?chs=350x350&cht=qr&chl='.$urlview.
                                         <tr>
                                             <th>No</th>
                                             <th>Tanggal</th>
-                                            <th>Keterangan</th>
+                                            <th>Penerima</th>
                                             <th>Quantity</th>
                                         </tr>
                                     </thead>
